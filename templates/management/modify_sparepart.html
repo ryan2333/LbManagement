@@ -1,0 +1,76 @@
+{% extends "management/base.html" %}
+{% load staticfiles %}
+{% block title %}添加图书{% endblock %}
+
+{% block content %}
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 col-md-offset-3 col-sm-10 col-sm-offset-1">
+                {% if state == 'success' %}
+                    <div class="well">
+                        <h2 class="text-success text-center">修改成功</h2>
+                    </div>
+                {% endif %}
+                <form method="POST" role="form" class="form-horizontal" action="/up_spart/">
+                    {% csrf_token %}
+                    <h1 class="form-signin-heading text-center">修改备件</h1>
+
+                    <div class="form-group">
+                        <label for="id_name" class="col-md-3 control-label">备件编号：</label>
+                        <div class="col-md-9">
+                            <input type="text" class="form-control" id="id_id" required name="Sid" value="{{ spart.Sid }}" autofocus>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="id_author" class="col-md-3 control-label">备件名称：</label>
+                        <div class="col-md-9">
+                            <input type="text" class="form-control" required name="Sname" id="id_name" value="{{ spart.Sname }}" >
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="id_category" class="col-md-3 control-label">生产厂商：</label>
+                        <div class="col-md-9">
+                            <input type="text" class="form-control" required name="Sbrand" id="id_brand" value="{{ spart.Sbrand }}" >
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="id_pubdate" class="col-md-3 control-label">购买日期</label>
+                        <div class="col-md-9">
+                            <input type="date" class="form-control" required name="Sbuy_time" id="id_buy_time" value="{{ spart.Sbuy_time }}">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="id_price" class="col-md-3 control-label">价格:</label>
+                        <div class="col-md-9">
+                            <input type="text" class="form-control" required name="Sprice" id="id_price" value="{{ spart.Sprice }}">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="id_pubdate" class="col-md-3 control-label">保修日期</label>
+                        <div class="col-md-9">
+                            <input type="date" class="form-control" required name="Sexpire" id="id_expire" value="{{ spart.Sexpire }}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="id_pubdate" class="col-md-3 control-label">配置信息</label>
+                        <div class="col-md-9">
+                            <textarea class="form-control" name="Sdetail" id="id_detail" rows="7" cols="25">{{ spart.Sdetail }}</textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-4 col-md-offset-4">
+                            <button class="btn btn btn-primary btn-block" type="submit">提交</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}
