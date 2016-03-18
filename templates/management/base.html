@@ -12,9 +12,9 @@
     <script type="text/javascript" src="{% static 'js/jquery.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
     <!--[if lt IE 9]>
-			<script src="http://cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-			<script src="http://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
-		<![endif]-->
+      <script src="http://cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="http://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
 </head>
 <body>
 <!--Here is the navbar-->
@@ -27,17 +27,92 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a href="{% url 'homepage' %}" class="navbar-brand">Library</a>
+            <a href="{% url 'homepage' %}" class="navbar-brand">DeviceAdmin</a>
         </div>
 
         <div class="collapse navbar-collapse" id="navbar-collapse-basepage">
             <ul class="nav navbar-nav">
                 <li id="homepage"><a href="{% url 'homepage' %}">主页</a></li>
-                {% if user.myuser.permission > 1 %}
-                    <li id="add_book"><a href="{% url 'add_book' %}">添加图书</a></li>
-                    <li id="add_img"><a href="{% url 'add_img' %}">添加图片</a></li>
-                {% endif %}
-                <li id="view_book"><a href="{% url 'view_book_list' %}">查看图书</a></li>
+                <!--    <li id="add_book"><a href="{% url 'add_book' %}">添加图书</a></li>
+                    <li id="add_img"><a href="{% url 'add_img' %}">添加图片</a></li>  -->
+                <li class="dropdown">
+                  <a href="view_book_list" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true">计算机管理
+                    <span class="caret"></span>
+                  </a>
+                  <ul class="dropdown-menu">
+                    {% if user.myuser.permission > 1 %}
+                    <li>
+                        <a href="/add_computer/">新增计算机</a>
+                    </li>
+                    {% endif %}
+                    <li>
+                        <a href="/view_computer_list/">查询</a>
+                    </li>
+                  </ul>
+                </li>
+                <li class="dropdown">
+                  <a href="view_book_list" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true">服务器管理
+                    <span class="caret"></span>
+                  </a>
+                  <ul class="dropdown-menu">
+                    {% if user.myuser.permission > 1 %}
+                    <li>
+                        <a href="/add_server/">新增服务器</a>
+                    </li>
+                    {% endif %}
+                    <li>
+                        <a href="/view_server_list/">查询</a>
+                    </li>
+                  </ul>
+                </li>
+                <li class="dropdown">
+                  <a href="view_book_list" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true">备件管理
+                    <span class="caret"></span>
+                  </a>
+                  <ul class="dropdown-menu">
+                    {% if user.myuser.permission > 1 %}
+                    <li>
+                        <a href="/add_sparepart/">新增备件</a>
+                    </li>
+                    {% endif %}
+                    <li>
+                        <a href="/view_sparepart_list/">查询</a>
+                    </li>
+                  </ul>
+                </li>
+                <li class="dropdown">
+                  <a href="view_book_list" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true">机房管理
+                    <span class="caret"></span>
+                  </a>
+                  <ul class="dropdown-menu">
+                    {% if user.myuser.permission > 1 %}
+                    <li>
+                        <a href="/add_idc/">新增机房</a>
+                    </li>
+                    {% endif %}
+                    <li>
+                        <a href="/view_idc_list/">查询</a>
+                    </li>
+                  </ul>
+                </li>
+                <li class="dropdown">
+                  <a href="view_book_list" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true">用户管理
+                    <span class="caret"></span>
+                  </a>
+                  <ul class="dropdown-menu">
+                    {% if user.myuser.permission > 1 %}
+                    <li>
+                        <a href="/add_user/">新增用户</a>
+                    </li>
+                    <li>
+                        <a href="/view_auser_list/">查询</a>
+                    </li>
+                    {% endif %}
+                    <li>
+                        <a href="/view_cuser_list/">查询</a>
+                    </li>
+                  </ul>
+                </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 {% if user %}
@@ -58,7 +133,7 @@
 <!-- header -->
 <header class="jumbotron subhead" id="header-base">
     <div class="container">
-        <h1>图书管理系统</h1>
+        <h3>设备管理系统</h3>
         <h3>&emsp;&emsp;知识改变命运</h3>
     </div>
 </header>
@@ -73,7 +148,7 @@
     <div class="container">
         <p class="text-center"><strong>HIT-CS</strong></p>
         <p class="text-center">©All rights reserved</p>
-        <h5 class="text-center"> Powered by&nbsp;<a href="http://yumendy.com/">Duan Yi</a></h5>
+        <h5 class="text-center"> Powered by&nbsp;<a href="http://www.pipgame.com/">Ryan Zhao</a></h5>
     </div>
 </footer>
 <!-- /.footer-->

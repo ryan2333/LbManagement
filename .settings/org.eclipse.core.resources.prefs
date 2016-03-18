@@ -1,0 +1,13 @@
+eclipse.preferences.version=1
+encoding//templates/management/add_book.html=UTF-8
+encoding//templates/management/add_computer.html=UTF-8
+encoding//templates/management/detail.html=UTF-8
+encoding//templates/management/detail_1.html=UTF-8
+encoding//templates/management/index.html=UTF-8
+encoding//templates/management/login.html=UTF-8
+encoding//templates/management/set_password.html=UTF-8
+encoding//templates/management/signup.html=UTF-8
+encoding//templates/management/view_book_list.html=UTF-8
+encoding//templates/management/view_computer_list.html=UTF-8
+encoding/<project>=UTF-8
+encoding/templates=UTF-8

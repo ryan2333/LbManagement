@@ -1,0 +1,137 @@
+{% extends "management/base.html" %}
+{% load staticfiles %}
+{% block title %}添加服务器{% endblock %}
+
+{% block content %}
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 col-md-offset-3 col-sm-10 col-sm-offset-1">
+                {% if state == 'success' %}
+                    <div class="well">
+                        <h2 class="text-success text-center">添加成功</h2>
+                    </div>
+                {% endif %}
+                <form method="POST" role="form" class="form-horizontal">
+                    {% csrf_token %}
+                    <h1 class="form-signin-heading text-center">添加服务器</h1>
+
+                    <div class="form-group">
+                        <label for="id_name" class="col-md-3 control-label">资产SN号：</label>
+                        <div class="col-md-9">
+                            <input type="text" class="form-control" id="id_id" required name="Sid" autofocus>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="id_name" class="col-md-3 control-label">设备名称：</label>
+                        <div class="col-md-9">
+                            <input type="text" class="form-control" id="id_name" required name="Sname" autofocus>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="id_author" class="col-md-3 control-label">设备状态：</label>
+                        <div class="col-md-9">
+                            <select class="form-control" required name="Sstatus" id="id_status">
+                                <option>在线</option>
+                                <option>闲置</option>
+                                <option>报废</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="id_category" class="col-md-3 control-label">生产厂商：</label>
+                        <div class="col-md-9">
+                            <select class="form-control" required name="Sbrand" id="id_brand">
+                                <option>Dell</option>
+                                <option>IBM</option>
+                                <option>HP</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="id_price" class="col-md-3 control-label">快速服务代码：</label>
+                        <div class="col-md-9">
+                            <input type="text" class="form-control" required name="Escode" id="id_Escode">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="id_price" class="col-md-3 control-label">管理部门：</label>
+                        <div class="col-md-9">
+                            <input type="text" class="form-control" required name="Sposition" id="id_position">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="id_price" class="col-md-3 control-label">IP地址1：</label>
+                        <div class="col-md-9">
+                            <input type="text" class="form-control" required name="Sip1" id="id_ip1" value="192.168.1.1">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="id_price" class="col-md-3 control-label">IP地址2：</label>
+                        <div class="col-md-9">
+                            <input type="text" class="form-control" required name="Sip2" id="id_ip2" value="10.1.1.1">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="id_pubdate" class="col-md-3 control-label">购买日期：</label>
+                        <div class="col-md-9">
+                            <input type="date" class="form-control" required name="Sbuy_time" id="id_buy_date" value="1970-01-01">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="id_price" class="col-md-3 control-label">价格：</label>
+                        <div class="col-md-9">
+                            <input type="text" class="form-control" required name="Sprice" id="id_price" value="15000">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="id_pubdate" class="col-md-3 control-label">保修日期：</label>
+                        <div class="col-md-9">
+                            <input type="date" class="form-control" required name="Sexpire" id="id_expire" value="1970-01-01">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="id_price" class="col-md-3 control-label">所属IDC：</label>
+                        <div class="col-md-9">
+                            <input type="text" class="form-control" name="Sidc" id="id_sidc">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="id_price" class="col-md-3 control-label">机柜编号：</label>
+                        <div class="col-md-9">
+                            <input type="text" class="form-control" name="Spod" id="id_spod">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="id_price" class="col-md-3 control-label">机柜位置：</label>
+                        <div class="col-md-9">
+                            <input type="text" class="form-control" name="Su" id="id_su">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="id_price" class="col-md-3 control-label">配置信息：</label>
+                        <div class="col-md-9">
+                            <textarea class="form-control" required name="Sdetail" id="id_detail" cols="25" rows="7"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="id_price" class="col-md-3 control-label">维护记录：</label>
+                        <div class="col-md-9">
+                            <textarea class="form-control" name="Sservices" id="id_services" cols="25" rows="7"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-4 col-md-offset-4">
+                            <button class="btn btn btn-primary btn-block" type="submit">提交</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}
