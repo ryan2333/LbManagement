@@ -262,7 +262,6 @@ def view_computer_list(request):
 #     return render_to_response('management/view_computer_list.html', {'computer_list':computer_list})
     return render(request, 'management/view_computer_list.html', content)
 
-
 def modify_computer(request):
     user = request.user if request.user.is_authenticated() else None
     computer_id = request.GET.get('Did', '')
@@ -468,3 +467,127 @@ def del_server(request):
     Server.objects.get(Sid=server_id).delete()
     return HttpResponseRedirect(reverse('view_server_list'))
 
+def add_spart(request):
+    user = request.user
+    state = None
+    if request.method == 'POST':
+        new_sparepart = SparePart(
+                Sid=request.POST.get('Sid', ''),
+                Sname=request.POST.get('Sname', ''),
+                Sbrand=request.POST.get('Sbrand', ''),
+                Sdetail=request.POST.get('Sdetail', ''),
+                Sbuy_time=request.POST.get('Sbuy_time', ''),
+                Sprice=request.POST.get('Sprice', ''),
+                Sexpire=request.POST.get('Sexpire', ''),
+        )
+        new_sparepart.save()
+        state = 'success'
+    content = {
+        'user': user,
+        'active_menu': 'add_spart',
+        'state': state,
+    }
+    return render(request, 'management/add_sparepart.html', content) 
+
+def up_spart(request):
+    user = request.user if request.user.is_authenticated() else None
+    spart_id = request.POST.get('Sid', '')
+    if spart_id == '':
+        return HttpResponseRedirect(reverse('view_sparepart_list'))
+    try:
+        spart = SparePart.objects.get(Sid=spart_id)
+    except spart.DoesNotExist:
+        return HttpResponseRedirect(reverse('view_sparepart_list'))
+    
+    p = SparePart.objects.get(Sid=spart_id)
+    p.Sname = request.POST.get('Sname')
+    p.Sbrand = request.POST.get('Sbrand')
+    p.Sbuy_time = request.POST.get('Sbuy_time')
+    p.Sprice = request.POST.get('Sprice')
+    p.Sexpire = request.POST.get('Sexpire')
+    p.Sdetail = request.POST.get('Sdetail')
+    p.save()
+    spart = SparePart.objects.get(Sid=server_id)
+    content = {
+        'user': user,
+        'active_menu': 'sparepartdetail',
+        'server': spart,
+    }
+    return render(request,'management/sparepartdetail.html',content)
+
+def del_spart(request):
+    user = request.user if request.user.is_authenticated() else None
+    spart_id = request.GET.get('Sid', '')
+    if spart_id == '':
+        return HttpResponseRedirect(reverse('view_spart_list'))    
+    SparePart.objects.get(Sid=spart_id).delete()
+    return HttpResponseRedirect(reverse('view_spart_list'))
+
+def view_spart_list(request):
+    user = request.user if request.user.is_authenticated() else None
+    Sid_list = SparePart.objects.values_list('Sid', flat=True).distinct()
+    query_Sid = request.GET.get('Sid', 'all')
+    if (not query_Sid) or SparePart.objects.filter(Sid=query_Sid).count() is 0:
+        query_Sid = 'all'
+        spart_list = SparePart.objects.all()
+    else:
+        spart_list = SparePart.objects.filter(category=query_category)
+#    computer_list = Computer.objects.all().values()
+    if request.method == 'POST':
+         keyword = request.POST.get('keyword', '')
+         spart_list = SparePart.objects.filter(Sid__contains=keyword)
+         query_Sid = 'all'
+    paginator = Paginator(spart_list, 20)
+    page = request.GET.get('page')
+    try:
+        spart_list = paginator.page(page)
+    except PageNotAnInteger:
+        spart_list = paginator.page(1)
+    except EmptyPage:
+        spart_list = paginator.page(paginator.num_pages)
+    content = {
+        'user': user,
+        'active_menu': 'view_sparepart',
+        'category_list': Sid_list,
+        'query_category': query_Sid,
+        'spart_list': spart_list,
+    }
+#     return render_to_response('management/view_computer_list.html', {'computer_list':computer_list})
+    return render(request, 'management/view_sparepart_list.html', content)
+
+def modify_spart(request):
+    user = request.user if request.user.is_authenticated() else None
+    spart_id = request.GET.get('Sid', '')
+    if spart_id == '':
+        return HttpResponseRedirect(reverse('view_sparepart_list'))
+    try:
+        spart = SparePart.objects.get(Sid=spart_id)
+    except server.DoesNotExist:
+        return HttpResponseRedirect(reverse('view_sparepart_list'))
+    print spart.Sid
+    spart.Sbuy_time= spart.Sbuy_time.strftime('%Y-%m-%d')
+    spart.Sexpire= spart.Sexpire.strftime('%Y-%m-%d')
+    content = {
+        'user': user,
+        'active_menu': 'view_book',
+        'spart': spart,
+    }
+
+    return render(request,'management/modify_sparepart.html',content)
+
+def spartdetail(request):
+    user = request.user if request.user.is_authenticated() else None
+    spart_id = request.GET.get('Sid', '')
+    if spart_id == '':
+        return HttpResponseRedirect(reverse('view_sparepart_list'))
+    try:
+        spart = SparePart.objects.get(Sid=spart_id)
+    except spare.DoesNotExist:
+        return HttpResponseRedirect(reverse('view_sparepart_list'))
+    content = {
+        'user': user,
+        'active_menu': 'view_spart',
+        'server': spart,
+    }
+
+    return render(request,'management/sparepartdetail.html',content)
