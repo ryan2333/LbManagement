@@ -17,7 +17,6 @@ def index(request):
     }
     return render(request, 'management/index.html', content)
 
-
 def signup(request):
     if request.user.is_authenticated():
         return HttpResponseRedirect(reverse('homepage'))
@@ -25,28 +24,31 @@ def signup(request):
     if request.method == 'POST':
         password = request.POST.get('password', '')
         repeat_password = request.POST.get('repeat_password', '')
-        if password == '' or repeat_password == '':
-            state = 'empty'
-        elif password != repeat_password:
-            state = 'repeat_error'
-        else:
-            username = request.POST.get('username', '')
-            if User.objects.filter(username=username):
-                state = 'user_exist'
-            else:
-                new_user = User.objects.create_user(username=username, password=password,
-                                                    email=request.POST.get('email', ''))
-                new_user.save()
-                new_my_user = MyUser(user=new_user, nickname=request.POST.get('nickname', ''))
-                new_my_user.save()
-                state = 'success'
+        user_type = request.POST.get('usertype')
+        print user_type
+#         if password == '' or repeat_password == '':
+#             state = 'empty'
+#         elif password != repeat_password:
+#             state = 'repeat_error'
+#         else:
+#             username = request.POST.get('username', '')
+#             if User.objects.filter(username=username):
+#                 state = 'user_exist'
+#             else:
+#                 new_user = User.objects.create_user(username=username, password=password,
+#                                                     email=request.POST.get('email', ''))
+#                 new_user.save()
+#                 new_my_user = MyUser(user=new_user, nickname=request.POST.get('nickname', ''))
+#                 new_my_user.save()
+    state = 'success'
+    type_list=UserType.objects.all().values()
     content = {
         'active_menu': 'homepage',
         'state': state,
         'user': None,
+        'type_list':type_list
     }
     return render(request, 'management/signup.html', content)
-
 
 def login(request):
     if request.user.is_authenticated():
@@ -68,11 +70,9 @@ def login(request):
     }
     return render(request, 'management/login.html', content)
 
-
 def logout(request):
     auth.logout(request)
     return HttpResponseRedirect(reverse('homepage'))
-
 
 @login_required
 def set_password(request):
@@ -100,7 +100,6 @@ def set_password(request):
     }
     return render(request, 'management/set_password.html', content)
 
-
 @user_passes_test(permission_check)
 def add_book(request):
     user = request.user
@@ -121,8 +120,6 @@ def add_book(request):
         'state': state,
     }
     return render(request, 'management/add_book.html', content)
-
-
 def view_book_list(request):
     user = request.user if request.user.is_authenticated() else None
     category_list = Book.objects.values_list('category', flat=True).distinct()
@@ -156,7 +153,6 @@ def view_book_list(request):
     
     return render(request, 'management/view_book_list.html', content)
 
-
 def cpudetail(request):
     user = request.user if request.user.is_authenticated() else None
     computer_id = request.GET.get('Did', '')
@@ -173,7 +169,6 @@ def cpudetail(request):
     }
 
     return render(request,'management/detail.html',content)
-
 
 @user_passes_test(permission_check)
 def add_img(request):
@@ -531,7 +526,7 @@ def view_spart_list(request):
         query_Sid = 'all'
         spart_list = SparePart.objects.all()
     else:
-        spart_list = SparePart.objects.filter(category=query_category)
+        spart_list = SparePart.objects.filter(category=query_Sid)
 #    computer_list = Computer.objects.all().values()
     if request.method == 'POST':
          keyword = request.POST.get('keyword', '')
@@ -548,8 +543,8 @@ def view_spart_list(request):
     content = {
         'user': user,
         'active_menu': 'view_sparepart',
-        'category_list': Sid_list,
-        'query_category': query_Sid,
+        'Sid_list': Sid_list,
+        'query_Sid': query_Sid,
         'spart_list': spart_list,
     }
 #     return render_to_response('management/view_computer_list.html', {'computer_list':computer_list})
@@ -587,7 +582,159 @@ def spartdetail(request):
     content = {
         'user': user,
         'active_menu': 'view_spart',
-        'server': spart,
+        'spart': spart,
     }
 
     return render(request,'management/sparepartdetail.html',content)
+
+def add_idcinfo(request):
+    user = request.user
+    state = None
+    if request.method == 'POST':
+        new_idcinfo = IdcInfo(
+                Iname=request.POST.get('Iname', ''),
+                Icontact=request.POST.get('Icontact', ''),
+                Itel=request.POST.get('Itel', ''),
+                Iaddress=request.POST.get('Iaddress', ''),
+                Ipods=request.POST.get('Ipods', ''),
+                Ibw=request.POST.get('Ibw', ''),
+                Iservices=request.POST.get('Iservices', ''),
+        )
+        new_idcinfo.save()
+        state = 'success'
+    content = {
+        'user': user,
+        'active_menu': 'add_idcinfo',
+        'state': state,
+    }
+    return render(request, 'management/add_idcinfo.html', content) 
+
+def up_idcinfo(request):
+    user = request.user if request.user.is_authenticated() else None
+    idcinfo_iname = request.POST.get('Iname', '')
+    if idcinfo_iname == '':
+        return HttpResponseRedirect(reverse('view_idcinfo_list'))
+    try:
+        idcinfo = IdcInfo.objects.get(Iname=idcinfo_iname)
+    except IdcInfo.DoesNotExist:
+        return HttpResponseRedirect(reverse('view_idcinfo_list'))
+    
+    p = IdcInfo.objects.get(Iname=idcinfo_iname)
+    p.Icontact = request.POST.get('Icontact')
+    p.Itel = request.POST.get('Itel')
+    p.Ipods = request.POST.get('Ipods')
+    p.Ibw = request.POST.get('Ibw')
+    p.Iaddress = request.POST.get('Iaddress')
+    p.Iservices = request.POST.get('Iservices')
+    p.save()
+    idcinfo = IdcInfo.objects.get(Iname=idcinfo_iname)
+    content = {
+        'user': user,
+        'active_menu': 'idcdetail',
+        'idcinfo': idcinfo,
+    }
+    return render(request,'management/idcdetail.html',content)
+
+def del_idcinfo(request):
+    user = request.user if request.user.is_authenticated() else None
+    idcinfo_iname = request.GET.get('Iname', '')
+    if idcinfo_iname == '':
+        return HttpResponseRedirect(reverse('view_idcinfo_list'))    
+    IdcInfo.objects.get(Iname=idcinfo_iname).delete()
+    return HttpResponseRedirect(reverse('view_idcinfo_list'))
+
+def view_idcinfo_list(request):
+    user = request.user if request.user.is_authenticated() else None
+    idc_list = IdcInfo.objects.values_list('Iname', flat=True).distinct()
+    query_Iname = request.GET.get('Iname', 'all')
+    if (not query_Iname) or IdcInfo.objects.filter(Iname=query_Iname).count() is 0:
+        query_Iname = 'all'
+        idc_list = IdcInfo.objects.all()
+    else:
+        idc_list = IdcInfo.objects.filter(category=query_Iname)
+#    computer_list = Computer.objects.all().values()
+    if request.method == 'POST':
+         keyword = request.POST.get('keyword', '')
+         idc_list = IdcInfo.objects.filter(Iname__contains=keyword)
+         query_Iname = 'all'
+    paginator = Paginator(idc_list, 20)
+    page = request.GET.get('page')
+    try:
+        idc_list = paginator.page(page)
+    except PageNotAnInteger:
+        idc_list = paginator.page(1)
+    except EmptyPage:
+        idc_list = paginator.page(paginator.num_pages)
+    content = {
+        'user': user,
+        'active_menu': 'view_idcinfo',
+        'idc_list': idc_list,
+        'query_Iname': query_Iname,
+        'idc_list': idc_list,
+    }
+#     return render_to_response('management/view_computer_list.html', {'computer_list':computer_list})
+    return render(request, 'management/view_idcinfo_list.html', content)
+
+def modify_idcinfo(request):
+    user = request.user if request.user.is_authenticated() else None
+    idcinfo_iname = request.GET.get('Iname', '')
+    if idcinfo_iname == '':
+        return HttpResponseRedirect(reverse('view_idcinfo_list'))
+    try:
+        idcinfo = SparePart.objects.get(Sid=spart_id)
+    except idcinfo.DoesNotExist:
+        return HttpResponseRedirect(reverse('view_idcinfo_list'))
+    content = {
+        'user': user,
+        'active_menu': 'view_idcinfo',
+        'spart': idcinfo,
+    }
+
+    return render(request,'management/modify_idcinfo.html',content)
+
+def idcdetail(request):
+    user = request.user if request.user.is_authenticated() else None
+    idcinfo_iname = request.GET.get('Iname', '')
+    if idcinfo_iname == '':
+        return HttpResponseRedirect(reverse('view_idcinfo_list'))
+    try:
+        idcinfo = IdcInfo.objects.get(Iname=idcinfo_iname)
+    except idcinfo.DoesNotExist:
+        return HttpResponseRedirect(reverse('view_idcinfo_list'))
+    content = {
+        'user': user,
+        'active_menu': 'view_idcinfo',
+        'idcinfo': idcinfo,
+    }
+
+    return render(request,'management/idcdetail.html',content)
+
+def add_user(request):
+    if request.user.is_authenticated():
+        return HttpResponseRedirect(reverse('homepage'))
+        state = None
+    if request.method == 'POST':
+        password = request.POST.get('password', '')
+        repeat_password = request.POST.get('repeat_password', '')
+        if password == '' or repeat_password == '':
+            state = 'empty'
+        elif password != repeat_password:
+            state = 'repeat_error'
+        else:
+            username = request.POST.get('username', '')
+            if User.objects.filter(username=username):
+                state = 'user_exist'
+            else:
+                new_user = User.objects.create_user(username=username, password=password,
+                                                    email=request.POST.get('email', ''))
+                new_user.save()
+                new_my_user = MyUser(user=new_user, nickname=request.POST.get('nickname', ''))
+                new_my_user.save()
+                state = 'success'
+    content = {
+        'active_menu': 'add_user',
+        'state': state,
+        'user': None,
+        'type_list': type_list,
+    }
+    return render(request, 'management/add_user.html', content)

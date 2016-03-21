@@ -65,6 +65,16 @@
                             <input type="email" class="form-control" required name="email" id="id_email">
                         </div>
                     </div>
+                    <div class="form-group">
+                        <label for="id_email" class="col-md-3 control-label">用户类型：</label>
+                        <div class="col-md-9">
+                            <select class="form-control" required name="usertype" >
+                                {% for type in type_list %}
+                                <option value = "{{ forloop.counter }}">{{ type.user_type }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
 
                     <div class="form-group">
                         <div class="col-md-4 col-md-offset-4">

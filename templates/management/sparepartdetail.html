@@ -1,6 +1,6 @@
 {% extends "management/base.html" %}
 {% load staticfiles %}
-{% block title %}查看计算机{% endblock %}
+{% block title %}查看备件{% endblock %}
 
 {% block content %}
 
@@ -8,21 +8,15 @@
         <div class="row">
            <div class="col-md-10 col-md-offset-1">
                 <div class="col-md-6 col-md-offset-1">
-                    <h2 class="text-center">{{ computer.Did }}</h2>
+                    <h2 class="text-center">{{ spart.Sid }}</h2>
                     <br>
-                    <h3>资产编号：{{ computer.Did }}</h3>
-                    <h3>设备名称：{{ computer.Dname }}</h3>
-                    <h3>设备状态：{{ computer.Dstatus }}</h3>
-                    <h3>生产厂商：{{ computer.Dbrand }}</h3>
-                    <h3>使用人：{{ computer.Duser }}</h3>
-                    <h3>部门：{{ computer.Dposition }}</h3>
-                    <h3>MAC地址：{{ computer.Dmac }}</h3>
-                    <h3>借用日期：{{ computer.Dallot|date:"Y-m-d" }}</h3>
-                    <h3>购买日期：{{ computer.Dbuy_time|date:"Y-m-d" }}</h3>
-                    <h3>采购价格：{{ computer.Dprice|floatformat:2 }}</h3>
-                    <h3>保修日期：{{ computer.Dexpire|date:"Y-m-d" }}</h3>
-                    <h3>详细配置：{{ computer.Ddetail }}</h3>
-                    <h3>维护记录：{{ computer.Dservices }}</h3>
+                    <h3>资产编号：{{ spart.Sid }}</h3>
+                    <h3>设备名称：{{ spart.Sname }}</h3>
+                    <h3>生产厂商：{{ spart.Sbrand }}</h3>
+                    <h3>购买日期：{{ spart.Sbuy_time|date:"Y-m-d" }}</h3>
+                    <h3>采购价格：{{ spart.Sprice|floatformat:2 }}</h3>
+                    <h3>保修日期：{{ spart.Sexpire|date:"Y-m-d" }}</h3>
+                    <h3>详细配置：{{ spart.Sdetail }}</h3>
                 </div>
             </div>
         </div>
